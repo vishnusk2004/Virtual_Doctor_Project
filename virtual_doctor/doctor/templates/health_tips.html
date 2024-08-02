@@ -1,0 +1,26 @@
+<<<<<<< HEAD
+{% extends 'base.html' %}
+
+{% block title %}Health Tips{% endblock %}
+
+{% block content %}
+<h2>Health Tips</h2>
+<ul class="list-group">
+    {% for tip in health_tips %}
+    <li class="list-group-item">{{ tip.title }} - {{ tip.content }} ({{ tip.date_posted }})</li>
+    {% endfor %}
+</ul>
+=======
+{% extends 'base.html' %}
+
+{% block title %}Health Tips{% endblock %}
+
+{% block content %}
+<h2>Health Tips</h2>
+<ul class="list-group">
+    {% for tip in health_tips %}
+    <li class="list-group-item">{{ tip.title }} - {{ tip.content }} ({{ tip.date_posted }})</li>
+    {% endfor %}
+</ul>
+>>>>>>> c5c4e22 (On branch main)
+{% endblock %}

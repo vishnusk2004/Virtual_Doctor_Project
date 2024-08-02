@@ -1,0 +1,24 @@
+<<<<<<< HEAD
+{% extends 'base.html' %}
+
+{% block title %}{{ disease.name }}{% endblock %}
+
+{% block content %}
+<h2>{{ disease.name }}</h2>
+<p><strong>Symptoms:</strong> {{ disease.symptoms }}</p>
+<p><strong>Precautions:</strong> {{ disease.precautions }}</p>
+<p><strong>Treatments:</strong> {{ disease.treatments }}</p>
+<a href="{% url 'home' %}" class="btn btn-secondary">Back to Home</a>
+=======
+{% extends 'base.html' %}
+
+{% block title %}{{ disease.name }}{% endblock %}
+
+{% block content %}
+<h2>{{ disease.name }}</h2>
+<p><strong>Symptoms:</strong> {{ disease.symptoms }}</p>
+<p><strong>Precautions:</strong> {{ disease.precautions }}</p>
+<p><strong>Treatments:</strong> {{ disease.treatments }}</p>
+<a href="{% url 'home' %}" class="btn btn-secondary">Back to Home</a>
+>>>>>>> c5c4e22 (On branch main)
+{% endblock %}
