@@ -4,7 +4,19 @@
 
 {% block content %}
 <div class="jumbotron text-center">
-    <h1 class="display-4">Welcome, {{ user.username }}!</h1>
-    <p class="lead">Use the navigation bar to explore the features.</p>
+    {% if user.is_authenticated %}
+        <h1 class="display-4">Welcome, {{ user.username }}!</h1>
+        {% if a_profile %}
+            {% if a_profile.avatar %}
+                <div class="text-center mt-4">
+                    <img src="{{ a_profile.avatar.url }}" class="img-thumbnail" alt="Avatar">
+                </div>
+            {% endif %}
+        {% endif %}
+        <p class="lead">Use the navigation bar to explore the features.</p>
+    {% else %}
+        <h1 class="display-4">Welcome, Guest!</h1>
+        <p class="lead">Please <a href="{% url 'login' %}">login</a> to explore the features.</p>
+    {% endif %}
 </div>
 {% endblock %}

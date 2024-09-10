@@ -1,59 +1,59 @@
-from django.db import models
+from django.db.models import Model, OneToOneField, CASCADE, TextField, ImageField, CharField, ForeignKey, DateTimeField
 from django.contrib.auth.models import User
 
-class UserProfile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    bio = models.TextField(blank=True, null=True)
-    avatar = models.ImageField(upload_to='avatars/', blank=True, null=True)
-    phone_number = models.CharField(max_length=15, blank=True)
+class UserProfile(Model):
+    user: OneToOneField = OneToOneField(User, on_delete=CASCADE)
+    bio: TextField = TextField(blank=True, null=True)
+    avatar: ImageField = ImageField(upload_to='avatars/', blank=True, null=True)
+    phone_number: CharField = CharField(max_length=15, blank=True)
 
-    def __str__(self):
-        return self.user.username
+    def __str__(self) -> str:
+        return self.user.__str__()
 
-class Disease(models.Model):
-    name = models.CharField(max_length=100)
-    symptoms = models.TextField()
-    precautions = models.TextField()
-    treatments = models.TextField()
+class Disease(Model):
+    name: CharField = CharField(max_length=100)
+    symptoms: TextField = TextField()
+    precautions: TextField = TextField()
+    treatments: TextField = TextField()
 
-    def __str__(self):
-        return self.name
+    def __str__(self) -> str:
+        return self.name.__str__()
 
-class Symptom(models.Model):
-    name = models.CharField(max_length=100)
+class Symptom(Model):
+    name: CharField = CharField(max_length=100)
 
-    def __str__(self):
-        return self.name
+    def __str__(self) -> str:
+        return self.name.__str__()
 
-class EmergencyContact(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    name = models.CharField(max_length=100)
-    phone_number = models.CharField(max_length=15)
-    relation = models.CharField(max_length=50)
+class EmergencyContact(Model):
+    user: ForeignKey = ForeignKey(User, on_delete=CASCADE)
+    name: CharField = CharField(max_length=100)
+    phone_number: CharField = CharField(max_length=15)
+    relation: CharField = CharField(max_length=50)
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.name} ({self.relation})"
 
-class Appointment(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    date = models.DateTimeField()
-    doctor_name = models.CharField(max_length=100)
+class Appointment(Model):
+    user: ForeignKey = ForeignKey(User, on_delete=CASCADE)
+    date: DateTimeField = DateTimeField()
+    doctor_name: CharField = CharField(max_length=100)
 
-    def __str__(self):
-        return f"{self.user.username} - {self.date} with {self.doctor_name}"
+    def __str__(self) -> str:
+        return f"{self.user.__str__()} - {self.date} with {self.doctor_name}"
 
-class HealthTip(models.Model):
-    title = models.CharField(max_length=100)
-    content = models.TextField()
-    date_posted = models.DateTimeField(auto_now_add=True)
+class HealthTip(Model):
+    title: CharField = CharField(max_length=100)
+    content: TextField = TextField()
+    date_posted: DateTimeField = DateTimeField(auto_now_add=True)
 
-    def __str__(self):
-        return self.title
+    def __str__(self) -> str:
+        return self.title.__str__()
 
-class SymptomTracker(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    symptom = models.ForeignKey(Symptom, on_delete=models.CASCADE)
-    date_reported = models.DateTimeField(auto_now_add=True)
+class SymptomTracker(Model):
+    user: ForeignKey = ForeignKey(User, on_delete=CASCADE)
+    symptom: ForeignKey = ForeignKey(Symptom, on_delete=CASCADE)
+    date_reported: DateTimeField = DateTimeField(auto_now_add=True)
 
-    def __str__(self):
-        return f"{self.user.username} - {self.symptom.name} on {self.date_reported}"
+    def __str__(self) -> str:
+        return f"{self.user.__str__()} - {self.symptom.name} on {self.date_reported}"

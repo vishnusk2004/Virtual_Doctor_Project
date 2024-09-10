@@ -5,10 +5,14 @@
 {% block content %}
 <h2>Predicted Diseases</h2>
 <ul class="list-group">
-    {% for disease in diseases %}
-    <li class="list-group-item">
-        <a href="{% url 'disease_detail' disease.pk %}">{{ disease.name }}</a>
-    </li>
-    {% endfor %}
+    {% if diseases %}
+        {% for disease in diseases %}
+            <li class="list-group-item">
+                <a href="{% url 'disease_detail' disease.pk %}">{{ disease.name }}</a>
+            </li>
+        {% endfor %}
+    {% else %}
+        <h4 class="text-warning">Couldn't Find any Disease, Try changing/adding more symptoms</h4>
+    {% endif %}
 </ul>
 {% endblock %}

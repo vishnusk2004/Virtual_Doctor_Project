@@ -9,29 +9,35 @@ https://docs.djangoproject.com/en/5.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
-
+from environ import Env
 import os
 from pathlib import Path
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
+env: Env = Env(
+    DEBUG=(bool, False)
+)
 
+# Build paths inside the project like this: BASE_DIR / 'subdir'.
+BASE_DIR: Path = Path(__file__).resolve().parent.parent
+
+# Take environment variables from .env file
+Env.read_env(os.path.join(BASE_DIR, '.env'))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-a4f&k)7gmdxn06@^jnumeg5-06lvtp2#ci89)v)6s%m7@t4ojx'
+SECRET_KEY: str = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG: bool = env('DEBUG')
 
-ALLOWED_HOSTS = []
 
+ALLOWED_HOSTS: list[str] = [env('ALLOWED_HOST_1')]
 
 # Application definition
 
-INSTALLED_APPS = [
+INSTALLED_APPS: list[str] = [
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -39,9 +45,15 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'doctor',
+    'crispy_forms',
+    'crispy_bootstrap5'
 ]
 
-MIDDLEWARE = [
+CRISPY_ALLOWED_TEMPLATE_PACKS: list[str] = ['bootstrap5']
+
+CRISPY_TEMPLATE_PACK: str = 'bootstrap5'
+
+MIDDLEWARE: list[str] = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -51,14 +63,14 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'virtual_doctor.urls'
+ROOT_URLCONF: str = 'virtual_doctor.urls'
 
-TEMPLATES = [
+TEMPLATES: list[dict[str, str | bool | list[str] | dict[str, list[str]]]] = [
     {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
-        'APP_DIRS': True,
-        'OPTIONS': {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',  #str
+        'DIRS': [],  #list[str]
+        'APP_DIRS': True,  #bool
+        'OPTIONS': {  #dict[str, list[str]]
             'context_processors': [
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
@@ -69,24 +81,22 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'virtual_doctor.wsgi.application'
-
+WSGI_APPLICATION: str = 'virtual_doctor.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
-DATABASES = {
+DATABASES: dict[str, dict[str, str]] = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
 
-
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
 
-AUTH_PASSWORD_VALIDATORS = [
+AUTH_PASSWORD_VALIDATORS: list[dict[str, str]] = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
     },
@@ -101,18 +111,16 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE: str = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE: str = 'UTC'
 
-USE_I18N = True
+USE_I18N: bool = True
 
-USE_TZ = True
-
+USE_TZ: bool = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
@@ -123,18 +131,18 @@ USE_TZ = True
 #     BASE_DIR / "static",
 # ]
 
-BASE_DIR = Path(__file__).resolve().parent.parent
-
 # Static files (CSS, JavaScript, Images)
-STATIC_URL = '/static/'
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+STATIC_URL: str = '/static/'
+STATICFILES_DIRS: list[str] = [os.path.join(BASE_DIR, 'static')]
+STATIC_ROOT: str = os.path.join(BASE_DIR, 'static_root')
 
 # Media files (user-uploaded files)
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL: str = '/media/'
+MEDIA_ROOT: str = os.path.join(BASE_DIR, 'doctor/media')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+DEFAULT_AUTO_FIELD: str = 'django.db.models.BigAutoField'
 
+LOGIN_URL: str = 'login'

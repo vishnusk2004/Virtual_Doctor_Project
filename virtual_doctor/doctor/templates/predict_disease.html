@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load crispy_forms_filters %}
 
 {% block title %}Predict Disease{% endblock %}
 
@@ -9,8 +10,7 @@
         <form method="post">
             {% csrf_token %}
             <div class="form-group">
-                {{ form.symptoms.label_tag }}
-                {{ form.symptoms }}
+                {{ form|crispy }}
             </div>
             <button type="submit" class="btn btn-primary">Predict</button>
         </form>
