@@ -48,5 +48,5 @@ class ProfileForm(forms.ModelForm):
                     'type':'tel',
                 },
             ),
-            'avatar': forms.FileInput(attrs={'class':'form-control-file'}),
+            'avatar': forms.ClearableFileInput(attrs={'class':'form-control-file'}),
         }
