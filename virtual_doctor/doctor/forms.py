@@ -1,11 +1,18 @@
 from django import forms
-from .models import EmergencyContact, Appointment, SymptomTracker
-from .models import UserProfile
+from doctor.models import EmergencyContact, Appointment, SymptomTracker
+from doctor.models import UserProfile
 
 
 class SymptomForm(forms.Form):
-    symptoms: forms.CharField = forms.CharField(widget=forms.Textarea,
-                                                help_text="Enter your symptoms, separated by commas")
+    symptoms: forms.CharField = forms.CharField(
+        widget=forms.Textarea(
+            attrs={
+                'class': 'form-control',
+                'placeholder': 'Enter your symptoms, separated by commas',
+                'rows': '3'
+            }
+        )
+    )
 
 
 class EmergencyContactForm(forms.ModelForm):
@@ -24,9 +31,22 @@ class SymptomTrackerForm(forms.ModelForm):
     class Meta:
         model = SymptomTracker
         fields: list[str] = ['symptom']
+        widgets = {
+            'symptom': forms.Select(attrs={'class':'custom-select'}),
+        }
 
 
 class ProfileForm(forms.ModelForm):
     class Meta:
         model = UserProfile
         fields: list[str] = ['avatar', 'bio', 'phone_number']
+        widgets = {
+            'bio': forms.Textarea(attrs={'class':'form-control', 'rows':'3'}),
+            'phone_number': forms.TextInput(
+                attrs={
+                    'class':'form-control',
+                    'type':'tel',
+                },
+            ),
+            'avatar': forms.FileInput(attrs={'class':'form-control-file'}),
+        }

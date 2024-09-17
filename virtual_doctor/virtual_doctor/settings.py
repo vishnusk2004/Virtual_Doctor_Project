@@ -46,7 +46,7 @@ INSTALLED_APPS: list[str] = [
     'django.contrib.staticfiles',
     'doctor',
     'crispy_forms',
-    'crispy_bootstrap5'
+    'crispy_bootstrap5',
 ]
 
 CRISPY_ALLOWED_TEMPLATE_PACKS: list[str] = ['bootstrap5']

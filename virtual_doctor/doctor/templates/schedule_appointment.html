@@ -12,10 +12,20 @@
             {{ form|crispy }}
             <button type="submit" class="btn btn-primary">Schedule</button>
         </form>
+
         <h3 class="mt-4">Your Appointments</h3>
         <ul class="list-group">
             {% for appointment in appointments %}
-            <li class="list-group-item">{{ appointment.date }} with {{ appointment.doctor_name }}</li>
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                {{ appointment.date }} with {{ appointment.doctor_name }}
+                
+                <!-- Delete Button -->
+                <form method="post" action="{% url 'schedule_appointment' %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="appointment_id" value="{{ appointment.id }}">
+                    <button type="submit" name="delete_appointment" class="btn btn-danger btn-sm">Delete</button>
+                </form>
+            </li>
             {% endfor %}
         </ul>
     </div>

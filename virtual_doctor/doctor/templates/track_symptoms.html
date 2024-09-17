@@ -12,10 +12,20 @@
             {{ form|crispy }}
             <button type="submit" class="btn btn-primary">Track</button>
         </form>
+
         <h3 class="mt-4">Your Symptoms</h3>
         <ul class="list-group">
             {% for symptom in symptoms %}
-            <li class="list-group-item">{{ symptom.symptom.name }} on {{ symptom.date_reported }}</li>
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                {{ symptom.symptom.name }} on {{ symptom.date_reported }}
+                
+                <!-- Delete Button -->
+                <form method="post" action="{% url 'track_symptoms' %}" style="display:inline;">
+                    {% csrf_token %}
+                    <input type="hidden" name="symptom_id" value="{{ symptom.id }}">
+                    <button type="submit" name="delete_symptom" class="btn btn-danger btn-sm">Delete</button>
+                </form>
+            </li>
             {% endfor %}
         </ul>
     </div>
