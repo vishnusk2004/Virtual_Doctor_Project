@@ -1,12 +1,16 @@
 {% extends 'base.html' %}
 
+{% block theme %}{{ selected_theme }}{% endblock %}
 {% block title %}Health Tips{% endblock %}
 
 {% block content %}
 <h2>Health Tips</h2>
 <ul class="list-group">
-    {% for tip in health_tips %}
-    <li class="list-group-item">{{ tip.title }} - {{ tip.content }} ({{ tip.date_posted }})</li>
+    {% for tip, image in tips_with_images %}
+        <li class="list-group-item">
+            <img src="{{ image }}" alt="Health Tip Image" style="height: 100px; width: 100px; border-radius: 50%; margin: 10px;">
+            <span style="font-weight: bold;">{{ tip.title }}</span> - {{ tip.content }}
+        </li>
     {% endfor %}
 </ul>
 {% endblock %}

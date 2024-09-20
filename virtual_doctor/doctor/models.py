@@ -6,6 +6,7 @@ class UserProfile(Model):
     bio: TextField = TextField(blank=True, null=True)
     avatar: ImageField = ImageField(upload_to='avatars/', blank=True, null=True)
     phone_number: CharField = CharField(max_length=15, blank=True)
+    theme: CharField = CharField(max_length=200, default='https://cdn.jsdelivr.net/npm/bootswatch@5.3.3/dist/cerulean/bootstrap.min.css')
 
     def __str__(self) -> str:
         return self.user.__str__()

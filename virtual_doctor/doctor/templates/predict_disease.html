@@ -1,19 +1,31 @@
 {% extends 'base.html' %}
-{% load crispy_forms_filters %}
 
+{% block theme %}{{ selected_theme }}{% endblock %}
 {% block title %}Predict Disease{% endblock %}
 
+{% load crispy_forms_filters %}
 {% block content %}
-<div class="row justify-content-center">
-    <div class="col-md-6">
-        <h2 class="mb-4">Predict Disease</h2>
-        <form method="post">
-            {% csrf_token %}
-            <div class="form-group">
-                {{ form|crispy }}
-            </div>
-            <button type="submit" class="btn btn-primary">Predict</button>
-        </form>
+    <h2 class="text-center mb-4">Predict Your Disease</h2>
+    <p class="lead text-center mb-4">Enter your symptoms below to get potential disease predictions. This tool can help you better understand your health!</p>
+    
+    <div class="row justify-content-center">
+        <img class="img-thumbnail" src="https://www.cdc.gov/flu/images/symptoms/signs-symptoms.png" alt="" />
+        <div class="col-md-6">
+            <form method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    {{ form|crispy }}
+                </div>
+                <button type="submit" class="btn btn-primary d-flex m-auto">Predict</button>
+            </form>
+        </div>
+        <img class="img-thumbnail" src="https://media-s3-us-east-1.ceros.com/houston-methodist/images/2022/02/11/d0aede3317b9c57a1b13eaf2396a46c6/cold.png" alt="" />
     </div>
-</div>
+    
+    <div class="mt-4">
+        <dl>
+            <dt><h5>Related Resources:</h5></dt>
+            <dd class="m-lg-3">Check out our <a href="{% url 'view_health_tips' %}">Health Tips</a> for more information on maintaining a healthy lifestyle.</dd>
+        </dl>
+    </div>
 {% endblock %}

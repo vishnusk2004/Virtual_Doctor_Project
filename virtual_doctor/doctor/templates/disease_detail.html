@@ -1,11 +1,35 @@
 {% extends 'base.html' %}
 
+{% block theme %}{{ selected_theme }}{% endblock %}
 {% block title %}{{ disease.name }}{% endblock %}
 
 {% block content %}
-<h2>{{ disease.name }}</h2>
-<p><strong>Symptoms:</strong> {{ disease.symptoms }}</p>
-<p><strong>Precautions:</strong> {{ disease.precautions }}</p>
-<p><strong>Treatments:</strong> {{ disease.treatments }}</p>
-<a href="{% url 'home' %}" class="btn btn-secondary">Back to Home</a>
+<div class="container mt-5">
+    <div class="card shadow-lg">
+        <div class="card-header bg-primary text-white">
+            <h2 class="mb-0">{{ disease.name }}</h2>
+        </div>
+        <div class="card-body">
+            <h4 class="card-title text-muted">Disease Information</h4>
+            <hr>
+            <div class="row">
+                <div class="col-md-6">
+                    <h5>Symptoms</h5>
+                    <p class="text-muted">{{ disease.symptoms }}</p>
+                </div>
+                <div class="col-md-6">
+                    <h5>Precautions</h5>
+                    <p class="text-muted">{{ disease.precautions }}</p>
+                </div>
+            </div>
+
+            <div class="mt-4">
+                <h5>Treatments</h5>
+                <p class="text-muted">{{ disease.treatments }}</p>
+            </div>
+
+            <a href="{% url 'home' %}" class="btn btn-secondary mt-4">Back to Home</a>
+        </div>
+    </div>
+</div>
 {% endblock %}
