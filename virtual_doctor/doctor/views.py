@@ -1,4 +1,3 @@
-import os.path
 import random
 
 from django.contrib.auth import login, authenticate, logout
@@ -14,18 +13,32 @@ from doctor.forms import SymptomForm, EmergencyContactForm, AppointmentForm, Sym
 from doctor.models import Disease, EmergencyContact, Appointment, HealthTip, SymptomTracker, UserProfile
 
 
-def register(request: WSGIRequest) -> HttpResponseRedirect | HttpResponse:
-    try:
-        user: User = request.user
-        if user.is_authenticated:
-            user_profile: UserProfile = UserProfile.objects.get(user=user)
-        else:
-            user_profile: UserProfile = UserProfile()
+def get_selected_theme(user: User) -> str:
+    """
+    Returns the selected theme for a user or a default theme if the user is not authenticated
+    or does not have a profile.
 
-        # Default to 'https://cdn.jsdelivr.net/npm/bootswatch@5.3.3/dist/cerulean/bootstrap.min.css' if no theme is selected
-        selected_theme: str = user_profile.theme or 'https://cdn.jsdelivr.net/npm/bootswatch@5.3.3/dist/cerulean/bootstrap.min.css'
+    Args:
+        user (User): The user for whom the theme is being selected.
+
+    Returns:
+        str: The URL of the selected or default theme.
+    """
+    default_theme: str = 'https://cdn.jsdelivr.net/npm/bootswatch@5.3.3/dist/cerulean/bootstrap.min.css'
+
+    if not user.is_authenticated:
+        return default_theme
+
+    try:
+        user_profile: UserProfile = UserProfile.objects.get(user=user)
+        return user_profile.theme or default_theme
     except UserProfile.DoesNotExist:
-        selected_theme: str = 'https://cdn.jsdelivr.net/npm/bootswatch@5.3.3/dist/cerulean/bootstrap.min.css'
+        return default_theme
+
+
+def register(request: WSGIRequest) -> HttpResponseRedirect | HttpResponse:
+    selected_theme: str = get_selected_theme(request.user)
+
     if request.method == 'POST':
         form: UserCreationForm = UserCreationForm(request.POST)
         if form.is_valid():
@@ -41,17 +54,8 @@ def register(request: WSGIRequest) -> HttpResponseRedirect | HttpResponse:
 
 
 def user_register(request: WSGIRequest) -> HttpResponseRedirect | HttpResponse:
-    try:
-        user: User = request.user
-        if user.is_authenticated:
-            user_profile: UserProfile = UserProfile.objects.get(user=user)
-        else:
-            user_profile: UserProfile = UserProfile()
+    selected_theme: str = get_selected_theme(request.user)
 
-        # Default to 'https://cdn.jsdelivr.net/npm/bootswatch@5.3.3/dist/cerulean/bootstrap.min.css' if no theme is selected
-        selected_theme: str = user_profile.theme or 'https://cdn.jsdelivr.net/npm/bootswatch@5.3.3/dist/cerulean/bootstrap.min.css'
-    except UserProfile.DoesNotExist:
-        selected_theme: str = 'https://cdn.jsdelivr.net/npm/bootswatch@5.3.3/dist/cerulean/bootstrap.min.css'
     if request.method == 'POST':
         form: UserCreationForm = UserCreationForm(request.POST)
         if form.is_valid():
@@ -64,17 +68,8 @@ def user_register(request: WSGIRequest) -> HttpResponseRedirect | HttpResponse:
 
 
 def user_login(request: WSGIRequest) -> HttpResponseRedirect | HttpResponse:
-    try:
-        user: User = request.user
-        if user.is_authenticated:
-            user_profile: UserProfile = UserProfile.objects.get(user=user)
-        else:
-            user_profile: UserProfile = UserProfile()
+    selected_theme: str = get_selected_theme(request.user)
 
-        # Default to 'https://cdn.jsdelivr.net/npm/bootswatch@5.3.3/dist/cerulean/bootstrap.min.css' if no theme is selected
-        selected_theme: str = user_profile.theme or 'https://cdn.jsdelivr.net/npm/bootswatch@5.3.3/dist/cerulean/bootstrap.min.css'
-    except UserProfile.DoesNotExist:
-        selected_theme: str = 'https://cdn.jsdelivr.net/npm/bootswatch@5.3.3/dist/cerulean/bootstrap.min.css'
     if request.method == 'POST':
         form: AuthenticationForm = AuthenticationForm(request, data=request.POST)
         if form.is_valid():
@@ -87,17 +82,8 @@ def user_login(request: WSGIRequest) -> HttpResponseRedirect | HttpResponse:
 
 
 def home(request: WSGIRequest) -> HttpResponseRedirect | HttpResponse:
-    try:
-        user: User = request.user
-        if user.is_authenticated:
-            user_profile: UserProfile = UserProfile.objects.get(user=user)
-        else:
-            user_profile: UserProfile = UserProfile()
+    selected_theme: str = get_selected_theme(request.user)
 
-        # Default to 'https://cdn.jsdelivr.net/npm/bootswatch@5.3.3/dist/cerulean/bootstrap.min.css' if no theme is selected
-        selected_theme: str = user_profile.theme or 'https://cdn.jsdelivr.net/npm/bootswatch@5.3.3/dist/cerulean/bootstrap.min.css'
-    except UserProfile.DoesNotExist:
-        selected_theme: str = 'https://cdn.jsdelivr.net/npm/bootswatch@5.3.3/dist/cerulean/bootstrap.min.css'
     user: User = request.user
     a_profile: UserProfile | None = None
     if user.is_authenticated:
@@ -111,17 +97,8 @@ def home(request: WSGIRequest) -> HttpResponseRedirect | HttpResponse:
 
 @login_required
 def predict_disease(request: WSGIRequest) -> HttpResponse:
-    try:
-        user: User = request.user
-        if user.is_authenticated:
-            user_profile: UserProfile = UserProfile.objects.get(user=user)
-        else:
-            user_profile: UserProfile = UserProfile()
+    selected_theme: str = get_selected_theme(request.user)
 
-        # Default to 'https://cdn.jsdelivr.net/npm/bootswatch@5.3.3/dist/cerulean/bootstrap.min.css' if no theme is selected
-        selected_theme: str = user_profile.theme or 'https://cdn.jsdelivr.net/npm/bootswatch@5.3.3/dist/cerulean/bootstrap.min.css'
-    except UserProfile.DoesNotExist:
-        selected_theme: str = 'https://cdn.jsdelivr.net/npm/bootswatch@5.3.3/dist/cerulean/bootstrap.min.css'
     if request.method == 'POST':
         form: SymptomForm = SymptomForm(request.POST)
         if form.is_valid():
@@ -142,34 +119,16 @@ def predict_disease(request: WSGIRequest) -> HttpResponse:
 
 @login_required
 def disease_detail(request: WSGIRequest, a_id: int) -> HttpResponse:
-    try:
-        user: User = request.user
-        if user.is_authenticated:
-            user_profile: UserProfile = UserProfile.objects.get(user=user)
-        else:
-            user_profile: UserProfile = UserProfile()
+    selected_theme: str = get_selected_theme(request.user)
 
-        # Default to 'https://cdn.jsdelivr.net/npm/bootswatch@5.3.3/dist/cerulean/bootstrap.min.css' if no theme is selected
-        selected_theme: str = user_profile.theme or 'https://cdn.jsdelivr.net/npm/bootswatch@5.3.3/dist/cerulean/bootstrap.min.css'
-    except UserProfile.DoesNotExist:
-        selected_theme: str = 'https://cdn.jsdelivr.net/npm/bootswatch@5.3.3/dist/cerulean/bootstrap.min.css'
     disease: Disease = get_object_or_404(Disease, id=a_id)
     return render(request, 'disease_detail.html', {'disease': disease, 'selected_theme': selected_theme})
 
 
 @login_required
 def manage_contacts(request: WSGIRequest) -> HttpResponseRedirect | HttpResponse:
-    try:
-        user: User = request.user
-        if user.is_authenticated:
-            user_profile: UserProfile = UserProfile.objects.get(user=user)
-        else:
-            user_profile: UserProfile = UserProfile()
+    selected_theme: str = get_selected_theme(request.user)
 
-        # Default to 'https://cdn.jsdelivr.net/npm/bootswatch@5.3.3/dist/cerulean/bootstrap.min.css' if no theme is selected
-        selected_theme: str = user_profile.theme or 'https://cdn.jsdelivr.net/npm/bootswatch@5.3.3/dist/cerulean/bootstrap.min.css'
-    except UserProfile.DoesNotExist:
-        selected_theme: str = 'https://cdn.jsdelivr.net/npm/bootswatch@5.3.3/dist/cerulean/bootstrap.min.css'
     form: EmergencyContactForm = EmergencyContactForm()
     if request.method == 'POST':
         if 'add_contact' in request.POST:
@@ -193,17 +152,8 @@ def manage_contacts(request: WSGIRequest) -> HttpResponseRedirect | HttpResponse
 
 @login_required
 def schedule_appointment(request: WSGIRequest) -> HttpResponseRedirect | HttpResponse:
-    try:
-        user: User = request.user
-        if user.is_authenticated:
-            user_profile: UserProfile = UserProfile.objects.get(user=user)
-        else:
-            user_profile: UserProfile = UserProfile()
+    selected_theme: str = get_selected_theme(request.user)
 
-        # Default to 'https://cdn.jsdelivr.net/npm/bootswatch@5.3.3/dist/cerulean/bootstrap.min.css' if no theme is selected
-        selected_theme: str = user_profile.theme or 'https://cdn.jsdelivr.net/npm/bootswatch@5.3.3/dist/cerulean/bootstrap.min.css'
-    except UserProfile.DoesNotExist:
-        selected_theme: str = 'https://cdn.jsdelivr.net/npm/bootswatch@5.3.3/dist/cerulean/bootstrap.min.css'
     if request.method == 'POST':
         if 'delete_appointment' in request.POST:  # Check if the delete button was pressed
             appointment_id: str = request.POST.get('appointment_id')
@@ -232,17 +182,8 @@ def schedule_appointment(request: WSGIRequest) -> HttpResponseRedirect | HttpRes
 
 @login_required
 def view_health_tips(request: WSGIRequest) -> HttpResponse:
-    try:
-        user: User = request.user
-        if user.is_authenticated:
-            user_profile: UserProfile = UserProfile.objects.get(user=user)
-        else:
-            user_profile: UserProfile = UserProfile()
+    selected_theme: str = get_selected_theme(request.user)
 
-        # Default to 'https://cdn.jsdelivr.net/npm/bootswatch@5.3.3/dist/cerulean/bootstrap.min.css' if no theme is selected
-        selected_theme: str = user_profile.theme or 'https://cdn.jsdelivr.net/npm/bootswatch@5.3.3/dist/cerulean/bootstrap.min.css'
-    except UserProfile.DoesNotExist:
-        selected_theme: str = 'https://cdn.jsdelivr.net/npm/bootswatch@5.3.3/dist/cerulean/bootstrap.min.css'
     health_tips: QuerySet[HealthTip] = HealthTip.objects.all()
     images: list[str] = [
         'https://www.slohealthcenter.com/wp-content/uploads/2022/04/17-Simple-And-Useful-Health-Tips-For-Children-To-Follow-Banner-910x1024-1-910x675.jpeg',
@@ -259,17 +200,8 @@ def view_health_tips(request: WSGIRequest) -> HttpResponse:
 
 @login_required
 def track_symptoms(request: WSGIRequest) -> HttpResponseRedirect | HttpResponse:
-    try:
-        user: User = request.user
-        if user.is_authenticated:
-            user_profile: UserProfile = UserProfile.objects.get(user=user)
-        else:
-            user_profile: UserProfile = UserProfile()
+    selected_theme: str = get_selected_theme(request.user)
 
-        # Default to 'https://cdn.jsdelivr.net/npm/bootswatch@5.3.3/dist/cerulean/bootstrap.min.css' if no theme is selected
-        selected_theme: str = user_profile.theme or 'https://cdn.jsdelivr.net/npm/bootswatch@5.3.3/dist/cerulean/bootstrap.min.css'
-    except UserProfile.DoesNotExist:
-        selected_theme: str = 'https://cdn.jsdelivr.net/npm/bootswatch@5.3.3/dist/cerulean/bootstrap.min.css'
     if request.method == 'POST':
         if 'delete_symptom' in request.POST:  # Check if the delete button was pressed
             symptom_id = request.POST.get('symptom_id')
@@ -298,17 +230,8 @@ def track_symptoms(request: WSGIRequest) -> HttpResponseRedirect | HttpResponse:
 
 @login_required
 def profile(request: WSGIRequest) -> HttpResponseRedirect | HttpResponse:
-    try:
-        user: User = request.user
-        if user.is_authenticated:
-            user_profile: UserProfile = UserProfile.objects.get(user=user)
-        else:
-            user_profile: UserProfile = UserProfile()
+    selected_theme: str = get_selected_theme(request.user)
 
-        # Default to 'https://cdn.jsdelivr.net/npm/bootswatch@5.3.3/dist/cerulean/bootstrap.min.css' if no theme is selected
-        selected_theme: str = user_profile.theme or 'https://cdn.jsdelivr.net/npm/bootswatch@5.3.3/dist/cerulean/bootstrap.min.css'
-    except UserProfile.DoesNotExist:
-        selected_theme: str = 'https://cdn.jsdelivr.net/npm/bootswatch@5.3.3/dist/cerulean/bootstrap.min.css'
     user: User = request.user
     a_profile: UserProfile
     a_profile, _ = UserProfile.objects.get_or_create(user=user)
