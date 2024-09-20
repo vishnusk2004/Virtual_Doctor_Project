@@ -14,12 +14,15 @@ class Command(BaseCommand):
             with open(file_path, mode='r', encoding='utf-8') as file:
                 reader = csv.DictReader(file)
                 for row in reader:
-                    health_tip = HealthTip(
-                        title=row["title"],
+                    a_title = row["title"]
+                    health_tip, created = HealthTip.objects.get_or_create(
+                        title=a_title,
                         content=row["content"],
                     )
-                    health_tip.save()
-                    self.stdout.write(self.style.SUCCESS(f'Imported: {health_tip.title}'))
+                    if created:
+                        self.stdout.write(self.style.SUCCESS(f'Successfully added Health Tip: {a_title}'))
+                    else:
+                        self.stdout.write(self.style.WARNING(f'Health Tip already exists: {a_title}'))
         except FileNotFoundError:
             self.stdout.write(self.style.ERROR('CSV file not found.'))
         except Exception as e:
