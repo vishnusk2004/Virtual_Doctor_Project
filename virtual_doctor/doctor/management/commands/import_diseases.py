@@ -20,7 +20,8 @@ class Command(BaseCommand):
                     name=a_name,
                     symptoms=row['symptoms'],
                     precautions=row['precautions'],
-                    treatments=row['treatments']
+                    treatments=row['treatments'],
+                    medicine=row['medicine'],
                 )
                 if created:
                     self.stdout.write(self.style.SUCCESS(f'Successfully added Disease: {a_name}'))

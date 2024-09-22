@@ -21,34 +21,37 @@
         <div class="collapse navbar-collapse" style="margin-left: 10vw;">
             <ul class="navbar-nav ml-auto">
                 {% if user.is_authenticated %}
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'predict_disease' %}">Predict Disease</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'manage_contacts' %}">Manage Contacts</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'schedule_appointment' %}">Schedule Appointment</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'view_health_tips' %}">Health Tips</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'track_symptoms' %}">Track Symptoms</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'profile' %}">Profile</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'logout' %}">Logout</a>
-                </li>
-                {% else %}
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'login' %}">Login</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'register' %}">Register</a>
-                </li>
+                    <li class="nav-item">
+                        <button class="btn btn-danger">SOS</button>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'predict_disease' %}">Predict Disease</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'manage_contacts' %}">Manage Contacts</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'schedule_appointment' %}">Schedule Appointment</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'view_health_tips' %}">Health Tips</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'track_symptoms' %}">Track Symptoms</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'profile' %}">Profile</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+                    </li>
+                    {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'login' %}">Login</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'register' %}">Register</a>
+                    </li>
                 {% endif %}
             </ul>
         </div>

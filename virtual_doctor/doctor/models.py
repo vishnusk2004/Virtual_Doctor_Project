@@ -16,6 +16,7 @@ class Disease(Model):
     symptoms: TextField = TextField()
     precautions: TextField = TextField()
     treatments: TextField = TextField()
+    medicine: TextField = TextField(default="")
 
     def __str__(self) -> str:
         return self.name.__str__()
